@@ -6,4 +6,8 @@ I got a couple root beers with the boys on the big Sunday game; in order to spic
 
 As an avid environmentalist, Joseph hates wasting paper on mundane tasks. He has recently been invited to watch the big upcoming game and wants to bet his life savings away using sports squares. Joseph arrives and his friends suggest using multiple pieces of paper to create the sports squares. He is instantly filled with rage and is tempted to leave the party simply  because of that statement. As an alternative, he suggests using the award winning sports squares website, "SquareSports". His friends agree and are amazed at the seamless transition between mobile and desktop, the amazing matchmaking service used to connect friends together, and the low cost required to use the program. The guests were happy and the sports party was a huge hit.
 
+<<<<<<< HEAD
 I got a couple root beers with the boys on the big Sunday game; in order to spice things up, one friend offers a friendly wager: a game of squares. Roberto quickly pulls out his phone and opens SquareSports, and makes a board in less than 5 seconds. We were able to make a game of squares before Green Bay picked up a quick touchdown return. It was so easy, I could gloat about the early head start without worrying about tallying the points
+=======
+As a freshman, Billy is very excited to watch the university basketball games on tv.  Every weekend he invites his friends to come over anad watch the game with him.  But his friends never want to watch the games with him because 'basketball is boring'.  So Billy decides to spice things up with a little friendly competetion.  He goes on Sports Squares and creates a baasketball square for he and his friends to use.
+>>>>>>> ecc798c6b32d52b26b26fa0062bf0cf7cc25927e
