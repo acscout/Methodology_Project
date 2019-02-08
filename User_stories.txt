@@ -1,3 +1,5 @@
 type your user stories in here y'all!!!!
 
-Your local family hero and philanthropist Shaggy loves playing squares with all of his friends during his favorite sporting events. Shaggy does not like having to draw out the squares by hand because his great strength makes it difficult to hold mortal pencils. He wishes there was an easier way to play this game with his friends on a phone or a computer.
+Your local family hero and philanthropist Shaggy loves playing squares with all of his friends during his favorite sporting events. Shaggy does not like having to draw out the squares by hand because his great strength makes it difficult to hold mortal pencils.  So he goes onto the SquareSports website and quickly creates a football square for the big game.  By simply printing the squares he can get squares as perfect as he is without destroying any pencils.
+
+
