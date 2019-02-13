@@ -1,0 +1,18 @@
+redo user stories into first person
+
+get domain
+
+make a working squares GUI
+
+randomizing the square numbers
+
+user can click and save board
+
+live scores 
+
+based NCAA
+
+10*10 board with labels and user can click the board they want
+
+accesss it online
+
