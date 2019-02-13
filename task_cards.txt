@@ -2,17 +2,19 @@ redo user stories into first person
 
 get domain
 
-make a working squares GUI
+an GUI for square
 
 randomizing the square numbers
+
+setting scoring method (period, quarter, ...)
 
 user can click and save board
 
 live scores 
 
-based NCAA
-
 10*10 board with labels and user can click the board they want
 
 accesss it online
+
+text file of team names for each sport
 
