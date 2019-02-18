@@ -1,0 +1,49 @@
+
+    document.createSvg = function(tagName) {
+        var svgNS = "http://www.w3.org/2000/svg";
+        return this.createElementNS(svgNS, tagName);
+    }; 
+
+    var drawGrid = function(n_row, n_col, size, pixelsPerSide, colors) {
+        var svg = document.createSvg("svg");
+        var grid_element = 0;
+        svg.setAttribute("width", pixelsPerSide);
+        svg.setAttribute("height", pixelsPerSide);
+        svg.setAttribute("viewBox", [0, 0, n_row * size, n_col * size].join(" "));
+        
+        for(var i = 0; i < n_col; i++) {
+            for(var j = 0; j < n_row; j++) {  
+              var g = document.createSvg("g");
+              g.setAttribute("transform", ["translate(", i*size, ",", j*size, ")"].join(""));
+              var box = document.createSvg("rect");
+              box.setAttribute("width", size);
+              box.setAttribute("height", size);
+              
+              // assumes grid is a box
+              if(grid_element%2 == 1)	box.setAttribute("fill", colors[0]);
+						  else	box.setAttribute("fill", colors[1]);
+              grid_element++;
+              
+              box.setAttribute("id", "b" + grid_element); 
+              g.appendChild(box);
+              svg.appendChild(g);
+            }  
+        }
+        svg.addEventListener(
+            "click",
+            function(e){
+                var id = e.target.id;
+                if(id){
+                		// have it change color and do stuff. I dont think we can cover it and remove that, you 
+                    // need to redraw the screen every time for a gui
+                    box.setAttribute("fill", colors[0]);
+                    }
+            }, 
+            false);
+        return svg;
+    };
+    
+    var container = document.getElementById("container");
+    // im thinking we can have the colors be the team color in a light shade
+    // cos idk how to do lines easily
+		container.appendChild(drawGrid(5, 5, 10, 200, ["red", "black"]));
