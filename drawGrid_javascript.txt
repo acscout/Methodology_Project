@@ -11,8 +11,8 @@
         svg.setAttribute("height", pixelsPerSide);
         svg.setAttribute("viewBox", [0, 0, n_row * size, n_col * size].join(" "));
         
-        for(var i = 0; i < n_col; i++) {
-            for(var j = 0; j < n_row; j++) {  
+        for(var i = 0; i < (n_col+1); i++) {
+            for(var j = 0; j < (n_row+1); j++) {  
               var g = document.createSvg("g");
               g.setAttribute("transform", ["translate(", i*size, ",", j*size, ")"].join(""));
               var box = document.createSvg("rect");
@@ -46,4 +46,4 @@
     var container = document.getElementById("container");
     // im thinking we can have the colors be the team color in a light shade
     // cos idk how to do lines easily
-		container.appendChild(drawGrid(5, 5, 10, 200, ["red", "black"]));
+		container.appendChild(drawGrid(10, 10, 10, 200, ["red", "black"]));
