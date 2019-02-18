@@ -1,0 +1,16 @@
+redo user stories into first person (1)
+
+get domain (8)
+
+an GUI for square (4)
+
+randomizing the square numbers (4)
+
+setting scoring method (period, quarter, ...) (2)
+
+10*10 board with labels and user can click the board they want (2)
+
+accesss it online (4)
+
+text file of team names for each sport (2)
+
