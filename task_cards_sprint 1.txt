@@ -1,6 +1,8 @@
-redo user stories into first person (1)
+user stories(5)
 
-get domain (8)
+learn html(5)
+
+get working html(8)
 
 an GUI for square (4)
 
@@ -10,7 +12,6 @@ setting scoring method (period, quarter, ...) (2)
 
 10*10 board with labels and user can click the board they want (2)
 
-accesss it online (4)
 
 text file of team names for each sport (2)
 
