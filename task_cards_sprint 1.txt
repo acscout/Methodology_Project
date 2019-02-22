@@ -12,6 +12,4 @@ setting scoring method (period, quarter, ...) (2)
 
 10*10 board with labels and user can click the board they want (2)
 
-
 text file of team names for each sport (2)
-
