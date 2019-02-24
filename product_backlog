@@ -1,1 +1,13 @@
+Web page that prompts user to select sport
 
+Grid generator creates new board for selected sport
+
+Labels for generated grid
+
+Fill grid with randomized numbers
+
+Diferent users can select squares
+
+Track score and indicate winner
+
+Set up Server
