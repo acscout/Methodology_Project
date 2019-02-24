@@ -1,0 +1,12 @@
+Sprint Backlog:
+	. User Stories
+	. Task Cards
+	. Learn CSS, Javascript, HTML, and Git
+	. Javascript square generator
+	. Basic website running HTML to host generator
+	. Server used to host website
+	. List of teams present in March Madness
+	. Name of company
+	. Domain for company
+	. Icon for company
+	
