@@ -1,15 +1,17 @@
-user stories(5)
+user stories(10)
 
-learn html(5)
+learn html(10)
 
 get working html(8)
 
-an GUI for square (4)
+an GUI for square (6)
 
 randomizing the square numbers (4)
 
-setting scoring method (period, quarter, ...) (2)
+setting scoring method (period, quarter, ...) (1)
 
-10*10 board with labels and user can click the board they want (2)
+10*10 board(2)
+
+labels for the user to select(1)
 
 text file of team names for each sport (2)
