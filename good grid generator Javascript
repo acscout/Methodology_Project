@@ -1,0 +1,27 @@
+var canvas = document.querySelector('canvas');
+// obviously we can change the canvas size as we like
+canvas.width = window.innerWidth/2;
+canvas.height = canvas.width;
+
+drawGrid(10);
+
+//rect
+/* c.fillStyle = "rgba(250,0,0,.7)";
+c.fillRect(100, 100, 100, 100);
+c.fillStyle = "rgba(250,0,0,.5)";
+c.fillRect(90, 90, 100, 100); */
+
+// n_blocks refers to the number of blocks per side
+function drawGrid(n_blocks) {
+	var c = canvas.getContext('2d');
+	var block_length = canvas.width/n_blocks;
+  
+	for(xBlock = 0; xBlock < n_blocks; xBlock++){
+  	for(yBlock = 0; yBlock < n_blocks; yBlock++){
+  		c.rect(xBlock*block_length, yBlock*block_length, block_length, block_length);
+    	c.stroke();
+      c.fillRect(xBlock*block_length, yBlock*block_length, block_length, block_length);
+      c.fillStyle = "rgba(224, 224, 235, .1)";
+    }
+  }
+}
