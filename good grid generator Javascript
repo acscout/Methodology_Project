@@ -3,15 +3,39 @@ var canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth/2;
 canvas.height = canvas.width;
 
-drawGrid(10);
+var mouse = { x: undefined,
+							y: undefined};
 
-//rect
-/* c.fillStyle = "rgba(250,0,0,.7)";
-c.fillRect(100, 100, 100, 100);
-c.fillStyle = "rgba(250,0,0,.5)";
-c.fillRect(90, 90, 100, 100); */
+var n_blocks = 15; // n_blocks refers to the number of blocks per side
 
-// n_blocks refers to the number of blocks per side
+
+// draw 10*10 grid
+drawGrid(n_blocks);
+             
+// click event
+canvas.addEventListener('click', clickGrid, false);
+
+
+// clicks on appropiate block within the grid
+function clickGrid(event){
+  mouse.x = event.x;
+	mouse.y = event.y;
+  var c = canvas.getContext('2d');
+  var block_length = canvas.width/n_blocks;
+  var block_x = Math.floor(mouse.x/block_length);
+  var block_y = Math.floor(mouse.y/block_length);
+  
+	fillBlock(block_x, block_y, block_length);
+}
+
+function fillBlock(block_x, block_y, block_length){
+  var c = canvas.getContext('2d');
+  // check if the block has been clicked, and either reset or click on block (update array)
+	c.fillStyle = "black";
+  c.fillRect(block_x*block_length, block_y*block_length, block_length, block_length);
+}
+
+// draws n_blocks * n_blocks grid
 function drawGrid(n_blocks) {
 	var c = canvas.getContext('2d');
 	var block_length = canvas.width/n_blocks;
@@ -20,8 +44,8 @@ function drawGrid(n_blocks) {
   	for(yBlock = 0; yBlock < n_blocks; yBlock++){
   		c.rect(xBlock*block_length, yBlock*block_length, block_length, block_length);
     	c.stroke();
+      c.fillStyle = "rgba(192, 225, 235, 1)";
       c.fillRect(xBlock*block_length, yBlock*block_length, block_length, block_length);
-      c.fillStyle = "rgba(224, 224, 235, .1)";
     }
   }
 }
