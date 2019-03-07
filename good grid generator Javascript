@@ -3,15 +3,20 @@ var canvas = document.querySelector('canvas');
 canvas.width = window.innerWidth/2;
 canvas.height = canvas.width;
 
-var mouse = { x: undefined,
+var mouse = { x: undefined,	// x and y coordinates for mouse
 							y: undefined};
 
-var n_blocks = 15; // n_blocks refers to the number of blocks per side
+var n_blocks = 15; 	// n_blocks refers to the number of blocks per side
+var grid_arr = []; 	// contains the color values of each square ('0' means uncolored)
+var user_arr = ["blue", "green", "red"]; // color for each player
+var iuser = -1; 			// current user
+var unclicked_color = "white";					 // color for an unclicked grid
 
-
+// setup grid_arr as 0's (no clicked cells)
+makeArray(n_blocks, n_blocks, grid_arr);
 // draw 10*10 grid
 drawGrid(n_blocks);
-             
+
 // click event
 canvas.addEventListener('click', clickGrid, false);
 
@@ -25,14 +30,24 @@ function clickGrid(event){
   var block_x = Math.floor(mouse.x/block_length);
   var block_y = Math.floor(mouse.y/block_length);
   
-	fillBlock(block_x, block_y, block_length);
-}
-
-function fillBlock(block_x, block_y, block_length){
-  var c = canvas.getContext('2d');
-  // check if the block has been clicked, and either reset or click on block (update array)
-	c.fillStyle = "black";
-  c.fillRect(block_x*block_length, block_y*block_length, block_length, block_length);
+  // if grid block is unclicked, click it
+  if(grid_arr[block_x][block_y] == "not selected"){
+  	//set player color
+    iuser++;
+    if(iuser >= user_arr.length){
+    	iuser = 0;
+    }
+  
+  
+  	grid_arr[block_x][block_y] = user_arr[iuser];
+    c.fillStyle = user_arr[iuser];
+    c.fillRect(block_x*block_length, block_y*block_length, block_length, block_length);
+  }
+  else{
+  	grid_arr[block_x][block_y] = "not selected";
+    c.fillStyle = unclicked_color;
+    c.fillRect(block_x*block_length, block_y*block_length, block_length, block_length);
+  }
 }
 
 // draws n_blocks * n_blocks grid
@@ -44,8 +59,19 @@ function drawGrid(n_blocks) {
   	for(yBlock = 0; yBlock < n_blocks; yBlock++){
   		c.rect(xBlock*block_length, yBlock*block_length, block_length, block_length);
     	c.stroke();
-      c.fillStyle = "rgba(192, 225, 235, 1)";
+      //c.fillStyle = "rgba(192, 225, 235, 1)";
+      c.fillStyle = unclicked_color;
       c.fillRect(xBlock*block_length, yBlock*block_length, block_length, block_length);
+    }
+  }
+}
+
+// fills array with 0's
+function makeArray(row, col, arr) {          
+	for(var i = 0; i < row; i++){
+  	arr[i] = [];
+  	for(var j = 0; j < col; j++){
+    	arr[i][j] = "not selected";
     }
   }
 }
