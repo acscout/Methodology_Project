@@ -10,13 +10,13 @@ var mouse = {
 
 var n_blocks = 3; // n_blocks refers to the number of blocks per side
 var total_blocks = n_blocks * n_blocks;
-var n_players = 5; // indicates the number of players
+var n_players = 7; // indicates the number of players
 var turns_per_player = Math.floor(total_blocks / n_players); // rounds down number of turns
 var total_player_turns = turns_per_player * n_players;
 var extra_blocks = total_blocks - total_player_turns; // number of blocks that will be unused
 var grid_arr = []; // contains the color values of each square ('0' means uncolored)
 var unused_block_color = "black";
-var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#d6d4e0", "#b8a9c9", "#622569"]; // color for each player
+var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#b8a9c9", "#622569"]; // color for each player
 var iuser = 0; // current user
 var iturn = 0; // current turn of user
 var unclicked_color = "white"; // color for an unclicked grid
@@ -64,7 +64,7 @@ function clickGrid(event) {
           if (grid_arr[i][j] == "not selected") {
             grid_arr[i][j] = "null";
             c.fillStyle = unused_block_color; //extra_color;
-            c.fillRect(j * block_length, i * block_length, block_length, block_length);
+            c.fillRect(i * block_length, j * block_length, block_length, block_length);
             //        c.fillRect(0, 0, block_length, block_length);
           }
         }
