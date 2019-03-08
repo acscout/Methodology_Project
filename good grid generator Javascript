@@ -8,11 +8,19 @@ var mouse = {
   y: undefined
 };
 
-var n_blocks = 15; // n_blocks refers to the number of blocks per side
+var n_blocks = 3; // n_blocks refers to the number of blocks per side
+var total_blocks = n_blocks * n_blocks;
+var n_players = 5; // indicates the number of players
+var turns_per_player = Math.floor(total_blocks / n_players); // rounds down number of turns
+var total_player_turns = turns_per_player * n_players;
+var extra_blocks = total_blocks - total_player_turns; // number of blocks that will be unused
 var grid_arr = []; // contains the color values of each square ('0' means uncolored)
-var user_arr = ["blue", "green", "red"]; // color for each player
-var iuser = -1; // current user
+var unused_block_color = "black";
+var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#d6d4e0", "#b8a9c9", "#622569"]; // color for each player
+var iuser = 0; // current user
+var iturn = 0; // current turn of user
 var unclicked_color = "white"; // color for an unclicked grid
+
 
 // setup grid_arr as 0's (no clicked cells)
 makeArray(n_blocks, n_blocks, grid_arr);
@@ -33,21 +41,48 @@ function clickGrid(event) {
   var block_y = Math.floor(mouse.y / block_length);
 
   // if grid block is unclicked, click it
-  // NEED TO PROTECT OTHER PLAYER COLORS AND NOT INCREMENT WHEN CLICKING OWN COLOR
   if (grid_arr[block_x][block_y] == "not selected") {
-    //set player color
-    iuser++;
-    if (iuser >= user_arr.length) {
-      iuser = 0;
+    // check if player is out of turns
+    if (turns_per_player == iturn) {
+      // check if the extra blocks need to be filled
+      iuser++;
+      iturn = 0;
     }
-    grid_arr[block_x][block_y] = user_arr[iuser];
-    c.fillStyle = user_arr[iuser];
-    c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length);
-  } else {
-    grid_arr[block_x][block_y] = "not selected";
-    c.fillStyle = unclicked_color;
-    c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length);
+    iturn++;
+
+    // check if all the moves have been selected
+    // if so click on box
+    if (iuser < n_players) {
+      grid_arr[block_x][block_y] = iuser;
+      c.fillStyle = user_arr[iuser];
+      c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length);
+
+    } else {
+      // else the extra boxes are unused
+      for (var i = 0; i < n_blocks; i++) {
+        for (var j = 0; j < n_blocks; j++) {
+          if (grid_arr[i][j] == "not selected") {
+            grid_arr[i][j] = "null";
+            c.fillStyle = unused_block_color; //extra_color;
+            c.fillRect(j * block_length, i * block_length, block_length, block_length);
+            //        c.fillRect(0, 0, block_length, block_length);
+          }
+        }
+      }
+
+    }
   }
+
+
+
+  // grid is clicked
+  else {
+    // protect previously selected grids by other players
+    /*       grid_arr[block_x][block_y] = "not selected";
+          c.fillStyle = unclicked_color;
+          c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length); */
+  }
+
 }
 
 // draws n_blocks * n_blocks grid
@@ -65,6 +100,7 @@ function drawGrid(n_blocks) {
     }
   }
 }
+
 
 // fills array with 0's
 function makeArray(row, col, arr) {
