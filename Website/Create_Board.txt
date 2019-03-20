@@ -1,16 +1,25 @@
-  <head>
-    <title>Create Board</title>
-  </head>
-
-  <body>
-    <h1>
-  
-  
-      <a href = "C:\Users\konde\Desktop\Software_Methodologies_Project\HomePage.html">
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SportzSquarez - Signup</title>
+  <style type="text/css">
+    canvas {
+      border: 1px solid black;
+    }
+<!-- makes canvas fully fit window -->
+    body {
+      margin: 0; 
+    }
+  </style>
+</head>
+<body>
+  <h1>
+    <a href="C:\Users\konde\Desktop\Website\HomePage.html">
         SportzSquarez
-      </a>
-    </h1>   
-    
-    <img src = "C:\Users\konde\Desktop\Software_Methodologies_Project\football-squares_10x10.jpg"/>
-   
-  </body>
+    </a>
+  </h1>
+
+  <canvas></canvas>
+  <script src="squareGen.js"></script>
+</body>
+</html>
