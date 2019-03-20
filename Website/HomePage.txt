@@ -1,16 +1,40 @@
-<body>
-  <div id="Title_Of_Website + Logo">
-    <h1>
-      <strong>SportzSquarez</strong>
-      <img src = "https://purepng.com/public/uploads/large/purepng.com-basketballbasketballgamebasketball-1701528096406slo4b.png" style="float: right" width = "320" height="320"/>
-    </h1>
- </div>   
-  
-  <div id="Create Board Link to new page">
-    <p1>
-        <br><br>Create a new board 
-    </p1>
-    <a href="C:\Users\konde\Desktop\Software_Methodologies_Project\Create_Board.html">Here</a>
-  </div>
-  
-</body>
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>SportzSquares - Home</title>
+  </head>
+
+  <body>
+    <div id="Title_Of_Website + Logo">
+      <h1>
+        <strong>SportzSquarez</strong>
+        <img src="https://purepng.com/public/uploads/large/purepng.com-basketballbasketballgamebasketball-1701528096406slo4b.png" style="float: right" width="320" height="320" />
+      </h1>
+    </div>
+
+
+    <div id="Login Page">
+      <p1>
+        <br><br>Login
+      </p1>
+      <a href="C:\Users\konde\Desktop\Website\Signup.html">Here</a>
+    </div>
+
+    <div id="Pick your team Link">
+      <p1>
+        <br><br>Pick your team
+      </p1>
+      <a href="C:\Users\konde\Desktop\Website\Teams.html">Here</a>
+    </div>
+
+    <div id="Create Board Link to new page">
+      <p1>
+        <br><br>Create a new board
+      </p1>
+      <a href="C:\Users\konde\Desktop\Website\Create_Board.html">Here</a>
+    </div>
+
+  </body>
+
+</html>
