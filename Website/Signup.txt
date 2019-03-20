@@ -1,0 +1,18 @@
+<head>
+  <title>SportzSquarez - Signup</title>
+</head>
+
+<body>
+  <h1>
+    <a href="C:\Users\konde\Desktop\Website\HomePage.html">
+        SportzSquarez
+      </a>
+  </h1>
+
+  <dev>
+    <p1>
+      <br><br>Username:<br>Password:<br>Retype Password:<br>Email
+    </p1>
+  </dev>
+
+</body>
