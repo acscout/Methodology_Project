@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 3/19/2019
+last edit: 3/20/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -16,6 +16,7 @@ var refresh_button = document.getElementById("Refresh");
 // we can change the canvas size as we like
 canvas.width = window.innerWidth / 2;
 canvas.height = canvas.width;
+var c = canvas.getContext('2d');
 
 var n_players = 4; // indicates the number of players
 var n_blocks = 3; // number of blocks per side (n*n grid)
@@ -53,12 +54,64 @@ canvas.addEventListener('click', clickGrid, false);
 
 //FUNCTIONS///////////////////////////////////////////////////
 
+// make2dArray - changes an empty array into a 2d array
+// row	: total rows in 2d array 
+// col	: total columns in 2d array
+// arr	: the array input (changes to 2d array)
+function make2dArray(row, col, arr) {
+  for (var i = 0; i < row; i++) {
+    arr[i] = [];
+    for (var j = 0; j < col; j++) {
+      arr[i][j] = "not selected";
+    }
+  }
+}
+
+// generateHexColor - returns random hex color
+function generateHexColor() {
+  return '#' + Math.random().toString(16).slice(2, 8).toUpperCase();
+}
+
+// generates a random integer from the range of min-max
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// draws grid lines over the user selection grid
+function drawGridLines(n_blocks, block_length, c){
+  for (xBlock = 0; xBlock < n_blocks; xBlock++) {
+    for (yBlock = 0; yBlock < n_blocks; yBlock++) {
+      c.rect(xBlock * block_length, yBlock * block_length, block_length, block_length);
+      c.stroke();
+    }
+  }
+}
+
+// drawGrid - draws n_blocks * n_blocks grid
+// n_blocks : number of blocks per side of the grid
+function drawGrid(n_blocks) {
+  var c = canvas.getContext('2d');
+  var block_length = canvas.width / n_blocks;
+
+  for (xBlock = 0; xBlock < n_blocks; xBlock++) {
+    for (yBlock = 0; yBlock < n_blocks; yBlock++) {
+      c.fillStyle = unclicked_color;
+      c.fillRect(xBlock * block_length, yBlock * block_length, block_length, block_length);
+    }
+  }
+  drawGridLines(n_blocks, block_length, c);
+}
+
+//EVENTS///////////////////////////////////////////////////
+
 // clickGrid - clicks on appropiate block within the grid and changes the blocks color
 function clickGrid(event) {
   if (random_selection == false) {
     mouse.x = event.x;
     mouse.y = event.y;
-    var c = canvas.getContext('2d');
+
     var block_length = canvas.width / n_blocks;
     var block_x = Math.floor(mouse.x / block_length); // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
     var block_y = Math.floor(mouse.y / block_length); // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
@@ -94,8 +147,11 @@ function clickGrid(event) {
             }
           }
         }
-
       }
+
+      // redraws grid lines
+			drawGridLines(n_blocks, block_length, c);
+
     }
     // code to unclick previously clicked blocks
     else {
@@ -107,121 +163,102 @@ function clickGrid(event) {
   }
 }
 
-// drawGrid - draws n_blocks * n_blocks grid
-// n_blocks : number of blocks per side of the grid
-function drawGrid(n_blocks) {
-  var c = canvas.getContext('2d');
+// fillRandom - fills the remaining squares randomly
+// currently this function only locks the random selection
+random_button.onclick = function() {
+  // for now random resets the board
+  //-----------------------------------------------------------------------
+  // reset user and turn counter so correct colors will be selected
+  iuser = 0;
+  iturn = 0;
+  // turn off possible lock that random sets
+  //random_selection = false;
+
+  //drawGrid(n_blocks);
+
   var block_length = canvas.width / n_blocks;
 
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
     for (yBlock = 0; yBlock < n_blocks; yBlock++) {
       c.rect(xBlock * block_length, yBlock * block_length, block_length, block_length);
       c.stroke();
-      c.fillStyle = unclicked_color;
+      c.fillStyle = black;
       c.fillRect(xBlock * block_length, yBlock * block_length, block_length, block_length);
     }
   }
-}
 
-// make2dArray - changes an empty array into a 2d array
-// row	: total rows in 2d array 
-// col	: total columns in 2d array
-// arr	: the array input (changes to 2d array)
-function make2dArray(row, col, arr) {
-  for (var i = 0; i < row; i++) {
-    arr[i] = [];
-    for (var j = 0; j < col; j++) {
-      arr[i][j] = "not selected";
-    }
-  }
-}
-
-// generateHexColor - returns random hex color
-function generateHexColor() {
-  return '#' + Math.random().toString(16).slice(2, 8).toUpperCase();
-}
-
-// generates a random integer from the range of min-max
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-// fillRandom - fills the remaining squares randomly
-// currently this function only locks the random selection
-random_button.onclick = function() {
-  // this could become redundant once a button click is pressed to make the block random
-  random_selection = true;
-  /* 
-    if (random_selection == true) {
-      var c = canvas.getContext('2d');
-      for (var block_x = 0; block_x < n_blocks; block_x++) {
-            for (var block_y = 0; block_y < n_blocks; block_y++) {
-      var remaining_blocks = total_blocks;
-
-      while (remaining_blocks > 0) {
-        var block_length = canvas.width / n_blocks;
-        var block_x = getRandomInt(0, n_blocks);
-        var block_y = getRandomInt(0, n_blocks);
-
-        if (grid_arr[block_x][block_y] == "not selected") {
-          // check if player is out of turns
-          if (turns_per_player == iturn) {
-            iuser++;
-            iturn = 0;
-          }
-          iturn++;
-
-          // check if all the moves have been selected
-          if (iuser < n_players) {
-            // more players than hardcoded colors
-            if (iuser >= user_arr.length) {
-              user_arr.push(generateHexColor());
-            }
-
-            // click on block with players color
-            grid_arr[block_x][block_y] = iuser;
-            c.fillStyle = user_arr[iuser];
-            c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length);
-
-          } else {
-            // else the extra blocks are unused and colored in
-            for (var i = 0; i < n_blocks; i++) {
-              for (var j = 0; j < n_blocks; j++) {
-                if (grid_arr[i][j] == "not selected") {
-                  grid_arr[i][j] = "null";
-                  c.fillStyle = unused_block_color;
-                  c.fillRect(i * block_length, j * block_length, block_length, block_length);
-                }
-              }
-            }
-
-          }
-        }
-        remaining_blocks--;
-      }
-    } */
-  /*     }
-        } */
-};
-
-// resets the grid to original grid of unclicked blocks when 'refresh' button clicked
-
-refresh_button.onclick = function() {
-	// reset user and turn counter so correct colors will be selected
-  iuser = 0;
-  iturn = 0;
-  // turn off possible lock that random sets
-  random_selection = false;
-  
-  drawGrid(n_blocks);
-  
   // reset the array values to all unclicked
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
     for (yBlock = 0; yBlock < n_blocks; yBlock++) {
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
-  
+  //==========================================================================
+
+
+  random_selection = true;
+  var remaining_blocks = total_blocks; // if we want random to not reset board, then this needs to be the total remainng blocks, not just set it to the total blocks
+
+  // this is not a very efficient way of randomizing the blocks, but it allows us to easily implement this when some of the blocks have already been selected by a user
+  while (remaining_blocks > 0) {
+    block_x = getRandomInt(0, n_blocks - 1);
+    block_y = getRandomInt(0, n_blocks - 1);
+
+    if (grid_arr[block_x][block_y] == "not selected") {
+      remaining_blocks--;
+
+      // check if player is out of turns
+      if (turns_per_player == iturn) {
+        iuser++;
+        iturn = 0;
+      }
+      iturn++;
+
+      // check if all the moves have been selected
+      if (iuser < n_players) {
+        // more players than hardcoded colors
+        if (iuser >= user_arr.length) {
+          user_arr.push(generateHexColor());
+        }
+
+        // click on block with players color
+        grid_arr[block_x][block_y] = iuser;
+        c.fillStyle = user_arr[iuser];
+        c.fillRect(block_x * block_length, block_y * block_length, block_length, block_length);
+      } else {
+        // else the extra blocks are unused and colored in
+        for (var i = 0; i < n_blocks; i++) {
+          for (var j = 0; j < n_blocks; j++) {
+            if (grid_arr[i][j] == "not selected") {
+              grid_arr[i][j] = "null";
+              c.fillStyle = unused_block_color;
+              c.fillRect(i * block_length, j * block_length, block_length, block_length);
+            }
+          }
+        }
+      }
+
+    }
+
+  }
+
+};
+
+// resets the grid to original grid of unclicked blocks when 'refresh' button clicked
+refresh_button.onclick = function() {
+  // reset user and turn counter so correct colors will be selected
+  iuser = 0;
+  iturn = 0;
+  // turn off possible lock that random sets
+  random_selection = false;
+
+  drawGrid(n_blocks);
+
+  // reset the array values to all unclicked
+  for (xBlock = 0; xBlock < n_blocks; xBlock++) {
+    for (yBlock = 0; yBlock < n_blocks; yBlock++) {
+      grid_arr[xBlock][yBlock] = "not selected";
+    }
+  }
+
 };
