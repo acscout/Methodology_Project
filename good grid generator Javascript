@@ -33,7 +33,8 @@ var extra_blocks = total_blocks - total_player_turns; // number of blocks that w
 var iuser = 0; // current user
 var iturn = 0; // current turn of user
 var grid_arr = []; // contains the iuser of the corelated box that has been clicked (turned into 2d arr)
-
+var block_length = canvas.width / n_blocks;
+    
 var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#b8a9c9", "#622569"]; // color for each player
 var unclicked_color = "white"; // color for an unclicked blocks
 var unused_block_color = "black"; // color for unused blocks
@@ -112,7 +113,6 @@ function clickGrid(event) {
     mouse.x = event.x;
     mouse.y = event.y;
 
-    var block_length = canvas.width / n_blocks;
     var block_x = Math.floor(mouse.x / block_length); // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
     var block_y = Math.floor(mouse.y / block_length); // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
 
@@ -166,26 +166,10 @@ function clickGrid(event) {
 // fillRandom - fills the remaining squares randomly
 // currently this function only locks the random selection
 random_button.onclick = function() {
-  // for now random resets the board
-  //-----------------------------------------------------------------------
-  // reset user and turn counter so correct colors will be selected
   iuser = 0;
   iturn = 0;
-  // turn off possible lock that random sets
-  //random_selection = false;
-
-  //drawGrid(n_blocks);
-
-  var block_length = canvas.width / n_blocks;
-
-  for (xBlock = 0; xBlock < n_blocks; xBlock++) {
-    for (yBlock = 0; yBlock < n_blocks; yBlock++) {
-      c.rect(xBlock * block_length, yBlock * block_length, block_length, block_length);
-      c.stroke();
-      c.fillStyle = black;
-      c.fillRect(xBlock * block_length, yBlock * block_length, block_length, block_length);
-    }
-  }
+  random_selection = true;
+  drawGrid(n_blocks);
 
   // reset the array values to all unclicked
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
@@ -193,10 +177,7 @@ random_button.onclick = function() {
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
-  //==========================================================================
 
-
-  random_selection = true;
   var remaining_blocks = total_blocks; // if we want random to not reset board, then this needs to be the total remainng blocks, not just set it to the total blocks
 
   // this is not a very efficient way of randomizing the blocks, but it allows us to easily implement this when some of the blocks have already been selected by a user
@@ -237,11 +218,11 @@ random_button.onclick = function() {
           }
         }
       }
-
+		
     }
 
   }
-
+drawGridLines(n_blocks, block_length, c);
 };
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
