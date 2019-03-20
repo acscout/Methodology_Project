@@ -1,0 +1,5 @@
+SportzSquares is a friendly party game that expands upon the game of football squares by adding additional sports.
+
+	After you select the desired sport, you will be brought to a blank 10 by 10 grid.  You may select the two sports teams by clicking on the drop-down menu along the side of the grid.  Select the desired team name from the  list.  
+
+	You and your friends can now select your squares for the game.  Once all the squares on the grid have been selected, the grid will randomly fill itself with numbers.  The numbers in each square correlate to the last digit of the teams score.  The winner is determined based on whomever selected the square with the numbers that match the last digit of each teams score at the end of the game. 
