@@ -1,10 +1,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>SportzSquarez - Signup</title>
+  <title>SportzSquarez - Create Board</title>
   <style type="text/css">
     canvas {
-      border: 1px solid black;
+      border: 3px solid black;
     }
 <!-- makes canvas fully fit window -->
     body {
@@ -12,14 +12,17 @@
     }
   </style>
 </head>
-<body>
+<body background="C:\Users\konde\Desktop\Website\images\background.jpg">
   <h1>
-    <a href="C:\Users\konde\Desktop\Website\HomePage.html">
-        SportzSquarez
-    </a>
+     <a href="C:\Users\konde\Desktop\Website\HomePage.html"><img src="C:\Users\konde\Desktop\Website\images\LOGO.png" style="float: left" width="320" height="100" hspace="20"/>
+      </a>
   </h1>
 
+  
+  
   <canvas></canvas>
-  <script src="squareGen.js"></script>
-</body>
+    <input id="Random" type="button" value="Random" onclick="doFunction();" />
+    <input id="Refresh" type="button" value="Refresh" onclick="doFunction();" />
+    <script src="squareGen.js"></script>
+  </body>
 </html>
