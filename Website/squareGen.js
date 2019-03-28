@@ -109,9 +109,12 @@ function drawGrid(n_blocks) {
 
 // clickGrid - clicks on appropiate block within the grid and changes the blocks color
 function clickGrid(event) {
+
+var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
+
   if (random_selection == false) {
-    mouse.x = event.x;
-    mouse.y = event.y;
+    mouse.x = event.x - canvas_origin.left;
+    mouse.y = event.y - canvas_origin.top;
 
     var block_x = Math.floor(mouse.x / block_length); // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
     var block_y = Math.floor(mouse.y / block_length); // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
