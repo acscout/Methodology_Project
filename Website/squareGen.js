@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 3/20/2019 - whipple
+last edit: 4/1/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -34,10 +34,13 @@ var iuser = 0; // current user
 var iturn = 0; // current turn of user
 var grid_arr = []; // contains the iuser of the corelated box that has been clicked (turned into 2d arr)
 var block_length = canvas.width / n_blocks;
-    
+
 var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#b8a9c9", "#622569"]; // color for each player
 var unclicked_color = "white"; // color for an unclicked blocks
 var unused_block_color = "black"; // color for unused blocks
+var block_x; // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
+var block_y; // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
+var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
 
 var random_selection = false; // will randomly select any remaining blocks
 
@@ -81,13 +84,19 @@ function getRandomInt(min, max) {
 }
 
 // draws grid lines over the user selection grid
-function drawGridLines(n_blocks, block_length, c){
+function drawGridLines(n_blocks, block_length, c) {
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
     for (yBlock = 0; yBlock < n_blocks; yBlock++) {
       c.rect(xBlock * block_length, yBlock * block_length, block_length, block_length);
       c.stroke();
     }
   }
+}
+
+// redraws the drawGridLines function over a single block (redraws the border of a block)
+function drawBlockLine(block_x, block_y, block_length, c) {
+  c.rect(block_x * block_length, block_y * block_length, block_length, block_length);
+  c.stroke();
 }
 
 // drawGrid - draws n_blocks * n_blocks grid
@@ -110,14 +119,14 @@ function drawGrid(n_blocks) {
 // clickGrid - clicks on appropiate block within the grid and changes the blocks color
 function clickGrid(event) {
 
-var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
+  canvas_origin = canvas.getBoundingClientRect();
 
   if (random_selection == false) {
     mouse.x = event.x - canvas_origin.left;
     mouse.y = event.y - canvas_origin.top;
 
-    var block_x = Math.floor(mouse.x / block_length); // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
-    var block_y = Math.floor(mouse.y / block_length); // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
+    block_x = Math.floor(mouse.x / block_length);
+    block_y = Math.floor(mouse.y / block_length);
 
     if (grid_arr[block_x][block_y] == "not selected") {
       // check if player is out of turns
@@ -152,8 +161,8 @@ var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be 
         }
       }
 
-      // redraws grid lines
-			drawGridLines(n_blocks, block_length, c);
+      // redraws grid lines around selected block
+      drawBlockLine(block_x, block_y, block_length, c);
 
     }
     // code to unclick previously clicked blocks
@@ -221,11 +230,11 @@ random_button.onclick = function() {
           }
         }
       }
-		
+
     }
 
   }
-drawGridLines(n_blocks, block_length, c);
+  drawGridLines(n_blocks, block_length, c);
 };
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
