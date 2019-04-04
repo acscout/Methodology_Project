@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 4/1/2019 - whipple
+last edit: 3/20/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -18,7 +18,7 @@ canvas.width = window.innerWidth / 2;
 canvas.height = canvas.width;
 var c = canvas.getContext('2d');
 
-var n_players = 5; // indicates the number of players
+var n_players = 6; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
 
 var mouse = {
@@ -228,6 +228,7 @@ random_button.onclick = function() {
               c.fillRect(i * block_length, j * block_length, block_length, block_length);
             }
           }
+          remaining_blocks = 0;
         }
       }
 
