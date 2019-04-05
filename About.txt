@@ -1,0 +1,8 @@
+This is a project for Marquette’s Software Methodologies Course. 
+Our vision is to make the football squares game easy and free for 
+new and old football fans, that is usable on a modern webpage. 
+Starting in the spring of 2019, our webpage has brought the squares 
+game for basketball, football, baseball, hockey, softball, cricket, 
+American Ninja warrior, WWE, trampoline basketball, freestyle 
+snowboarding. BMX racing, skateboarding, UFC, Wii sports, ultimate frisbee, 
+horse racing and dodgeball
