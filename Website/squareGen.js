@@ -5,10 +5,11 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 3/20/2019 - whipple
+last edit: 4/8/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
+///////////////////////////////////////////////////////
 var canvas = document.querySelector('canvas');
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
@@ -18,7 +19,7 @@ canvas.width = window.innerWidth / 2;
 canvas.height = canvas.width;
 var c = canvas.getContext('2d');
 
-var n_players = 6; // indicates the number of players
+var n_players = 5; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
 
 var mouse = {
@@ -42,10 +43,17 @@ var block_x; // int value corrosponding to the blocks x value in grid (0, 1, 2, 
 var block_y; // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
 var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
 
+var top_team_score; // user inputted score for the team on top of the block
+var side_team_score; // user inputted score for the team on left of the block
+var top_score_arr; // 1 - nblock size array that randomly orders 1-nblock. used to randomize squares
+var side_score_arr; // same, for the side team
+var winning_block; // compare the side/top_score arr with the user inputted top/side_team_score to determine the winning block.
+
 var random_selection = false; // will randomly select any remaining blocks
 
 
 //RUNNING CODE/////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
 
 // setup grid_arr as "not selected"
 make2dArray(n_blocks, n_blocks, grid_arr);
@@ -57,6 +65,7 @@ canvas.addEventListener('click', clickGrid, false);
 
 
 //FUNCTIONS///////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
 
 // make2dArray - changes an empty array into a 2d array
 // row	: total rows in 2d array 
@@ -114,7 +123,16 @@ function drawGrid(n_blocks) {
   drawGridLines(n_blocks, block_length, c);
 }
 
+// need to update some variables if nPlayers is changed
+function updateNPlayers(total_blocks, n_players, turns_per_player, total_player_turns, extra_blocks) {
+	  n_players = ~~document.getElementById("nPlayers").value;
+  turns_per_player = Math.floor(total_blocks / n_players);
+  total_player_turns = turns_per_player * n_players; 
+  extra_blocks = total_blocks - total_player_turns;
+}
+
 //EVENTS///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
 
 // clickGrid - clicks on appropiate block within the grid and changes the blocks color
 function clickGrid(event) {
@@ -240,6 +258,16 @@ random_button.onclick = function() {
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
+//	updateNPlayers(total_blocks, n_players, turns_per_player, total_player_turns, extra_blocks);
+   n_players = ~~document.getElementById("nPlayers").value;
+  turns_per_player = Math.floor(total_blocks / n_players);
+  total_player_turns = turns_per_player * n_players; 
+  extra_blocks = total_blocks - total_player_turns;
+  console.log(n_players);
+  console.log(turns_per_player);
+  console.log(total_player_turns);
+  console.log(extra_blocks); 
+  
   // reset user and turn counter so correct colors will be selected
   iuser = 0;
   iturn = 0;
