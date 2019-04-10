@@ -19,7 +19,7 @@ canvas.width = window.innerWidth / 2;
 canvas.height = canvas.width;
 var c = canvas.getContext('2d');
 
-var n_players = 5; // indicates the number of players
+var n_players = 2; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
 
 var mouse = {
@@ -123,12 +123,22 @@ function drawGrid(n_blocks) {
   drawGridLines(n_blocks, block_length, c);
 }
 
-// need to update some variables if nPlayers is changed
-function updateNPlayers(total_blocks, n_players, turns_per_player, total_player_turns, extra_blocks) {
-	  n_players = ~~document.getElementById("nPlayers").value;
-  turns_per_player = Math.floor(total_blocks / n_players);
-  total_player_turns = turns_per_player * n_players; 
-  extra_blocks = total_blocks - total_player_turns;
+// checks if the value is a number and greater than 2 (need at least two platers) and less than max 100 players
+// sets txt field to red if a bad input wsa entered
+function checkValidNumber(num){
+	var max = 100;
+  var min = 2;
+  var txt = document.getElementById("nPlayers");
+  
+  if(isNaN(num) || num < min || num > max){
+  	txt.style.backgroundColor = "red";
+    document.getElementById("nPlayers").value = 2;
+  	return 2;
+  }
+  
+  txt.style.backgroundColor = "";
+  return num;
+  
 }
 
 //EVENTS///////////////////////////////////////////////////
@@ -196,6 +206,12 @@ function clickGrid(event) {
 // fillRandom - fills the remaining squares randomly
 // currently this function only locks the random selection
 random_button.onclick = function() {
+  // This updates the number of players based on texbox value
+ n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
+  turns_per_player = Math.floor(total_blocks / n_players);
+  total_player_turns = turns_per_player * n_players; 
+  extra_blocks = total_blocks - total_player_turns;
+  
   iuser = 0;
   iturn = 0;
   random_selection = true;
@@ -258,16 +274,12 @@ random_button.onclick = function() {
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
-//	updateNPlayers(total_blocks, n_players, turns_per_player, total_player_turns, extra_blocks);
-   n_players = ~~document.getElementById("nPlayers").value;
+  // This updates the number of players based on texbox value
+	n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
   total_player_turns = turns_per_player * n_players; 
   extra_blocks = total_blocks - total_player_turns;
-  console.log(n_players);
-  console.log(turns_per_player);
-  console.log(total_player_turns);
-  console.log(extra_blocks); 
-  
+
   // reset user and turn counter so correct colors will be selected
   iuser = 0;
   iturn = 0;
