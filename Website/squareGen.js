@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 4/8/2019 - whipple
+last edit: 4/10/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -45,8 +45,8 @@ var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be 
 
 var top_team_score; // user inputted score for the team on top of the block
 var side_team_score; // user inputted score for the team on left of the block
-var top_score_arr; // 1 - nblock size array that randomly orders 1-nblock. used to randomize squares
-var side_score_arr; // same, for the side team
+var top_score_arr = []; // 1 - nblock size array that randomly orders 1-nblock. used to randomize squares
+var side_score_arr = []; // same, for the side team
 var winning_block; // compare the side/top_score arr with the user inputted top/side_team_score to determine the winning block.
 
 var random_selection = false; // will randomly select any remaining blocks
@@ -58,11 +58,12 @@ var random_selection = false; // will randomly select any remaining blocks
 // setup grid_arr as "not selected"
 make2dArray(n_blocks, n_blocks, grid_arr);
 // draw 10*10 grid
-drawGrid(n_blocks);
+drawGrid(n_blocks, top_score_arr, side_score_arr);
 
 // click event, if user clicks canvas
 canvas.addEventListener('click', clickGrid, false);
 
+drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
 
 //FUNCTIONS///////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -110,7 +111,7 @@ function drawBlockLine(block_x, block_y, block_length, c) {
 
 // drawGrid - draws n_blocks * n_blocks grid
 // n_blocks : number of blocks per side of the grid
-function drawGrid(n_blocks) {
+function drawGrid(n_blocks, top_score_arr, side_score_arr) {
   var c = canvas.getContext('2d');
   var block_length = canvas.width / n_blocks;
 
@@ -123,22 +124,70 @@ function drawGrid(n_blocks) {
   drawGridLines(n_blocks, block_length, c);
 }
 
-// checks if the value is a number and greater than 2 (need at least two platers) and less than max 100 players
+//
+function drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr){
+	top_score_arr = setScoreArr(top_score_arr, n_blocks);
+  side_score_arr = setScoreArr(side_score_arr, n_blocks);
+  var off_set = block_length/2;
+  
+	c.font = block_length + "px arial";
+	c.textBaseline = "middle";
+  c.textAlign = "center";
+  c.fillStyle = "black"
+
+  for(i = 0; i < top_score_arr.length; i++){
+   	c.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
+  	c.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
+  }
+}
+
+// checks if the value is a number and greater than 2 (need at least two players) and less than max 100 players
 // sets txt field to red if a bad input wsa entered
-function checkValidNumber(num){
-	var max = 100;
+function checkValidNumber(num) {
+  var max = 100;
   var min = 2;
   var txt = document.getElementById("nPlayers");
-  
-  if(isNaN(num) || num < min || num > max){
-  	txt.style.backgroundColor = "red";
+
+  if (isNaN(num) || num < min || num > max) {
+    txt.style.backgroundColor = "red";
     document.getElementById("nPlayers").value = 2;
-  	return 2;
+    return 2;
   }
-  
+
   txt.style.backgroundColor = "";
   return num;
-  
+
+}
+
+// sets the top and side team range of randomly ordered values based on nblocks
+function setScoreArr(team, size) {
+	team = [];
+  for (var i = 0; i < size; i++) {
+  	team.push(i);
+}
+
+return shuffle(team);
+}
+
+// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+function shuffle(array) {
+  var currentIndex = array.length,
+    temporaryValue, randomIndex;
+
+  // While there remain elements to shuffle...
+  while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
 }
 
 //EVENTS///////////////////////////////////////////////////
@@ -207,15 +256,15 @@ function clickGrid(event) {
 // currently this function only locks the random selection
 random_button.onclick = function() {
   // This updates the number of players based on texbox value
- n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
+  n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
-  total_player_turns = turns_per_player * n_players; 
+  total_player_turns = turns_per_player * n_players;
   extra_blocks = total_blocks - total_player_turns;
-  
+
   iuser = 0;
   iturn = 0;
   random_selection = true;
-  drawGrid(n_blocks);
+  drawGrid(n_blocks, top_score_arr, side_score_arr);
 
   // reset the array values to all unclicked
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
@@ -270,14 +319,21 @@ random_button.onclick = function() {
 
   }
   drawGridLines(n_blocks, block_length, c);
+  
+  
+  
+  
+  drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
+  
+  
 };
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
   // This updates the number of players based on texbox value
-	n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
+  n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
-  total_player_turns = turns_per_player * n_players; 
+  total_player_turns = turns_per_player * n_players;
   extra_blocks = total_blocks - total_player_turns;
 
   // reset user and turn counter so correct colors will be selected
@@ -286,7 +342,7 @@ refresh_button.onclick = function() {
   // turn off possible lock that random sets
   random_selection = false;
 
-  drawGrid(n_blocks);
+  drawGrid(n_blocks, top_score_arr, side_score_arr);
 
   // reset the array values to all unclicked
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
@@ -294,5 +350,10 @@ refresh_button.onclick = function() {
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
+
+
+
+drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
+
 
 };
