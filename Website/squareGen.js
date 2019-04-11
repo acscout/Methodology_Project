@@ -5,19 +5,16 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 4/10/2019 - whipple
+last edit: 4/11/2019 - whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
 ///////////////////////////////////////////////////////
-var canvas = document.querySelector('canvas');
+var inner_canvas = document.getElementById("clicking canvas");
+var top_header_canvas = document.getElementById("top header canvas");
+var left_header_canvas = document.getElementById("left header canvas");
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
-
-// we can change the canvas size as we like
-canvas.width = window.innerWidth / 2;
-canvas.height = canvas.width;
-var c = canvas.getContext('2d');
 
 var n_players = 2; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
@@ -34,14 +31,14 @@ var extra_blocks = total_blocks - total_player_turns; // number of blocks that w
 var iuser = 0; // current user
 var iturn = 0; // current turn of user
 var grid_arr = []; // contains the iuser of the corelated box that has been clicked (turned into 2d arr)
-var block_length = canvas.width / n_blocks;
+var block_length = window.innerWidth / 1.5 / n_blocks;
 
 var user_arr = ["#f9d5e5", "#eeac99", "#e06377", "#c83349", "#5b9aa0", "#b8a9c9", "#622569"]; // color for each player
 var unclicked_color = "white"; // color for an unclicked blocks
 var unused_block_color = "black"; // color for unused blocks
 var block_x; // int value corrosponding to the blocks x value in grid (0, 1, 2, 3...)
 var block_y; // int value corrosponding to the blocks y value in grid (0, 1, 2, 3...)
-var canvas_origin = canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
+var canvas_origin = inner_canvas.getBoundingClientRect(); // allows correct box to be clicked regardless of where canvas is on the screen
 
 var top_team_score; // user inputted score for the team on top of the block
 var side_team_score; // user inputted score for the team on left of the block
@@ -51,6 +48,20 @@ var winning_block; // compare the side/top_score arr with the user inputted top/
 
 var random_selection = false; // will randomly select any remaining blocks
 
+// we can change the canvas size as we like
+inner_canvas.width = window.innerWidth / 1.5;
+inner_canvas.height = inner_canvas.width;
+
+top_header_canvas.width = window.innerWidth / 1.5;
+top_header_canvas.height = block_length;
+top_header_canvas.style.left = block_length;
+
+left_header_canvas.width = block_length;
+left_header_canvas.height = window.innerWidth / 1.5;
+
+var c = inner_canvas.getContext('2d');
+var topc = top_header_canvas.getContext('2d');
+var leftc = left_header_canvas.getContext('2d');
 
 //RUNNING CODE/////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
@@ -61,9 +72,12 @@ make2dArray(n_blocks, n_blocks, grid_arr);
 drawGrid(n_blocks, top_score_arr, side_score_arr);
 
 // click event, if user clicks canvas
-canvas.addEventListener('click', clickGrid, false);
+inner_canvas.addEventListener('click', clickGrid, false);
 
-drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
+// reorder colors in the color arr
+shuffle(user_arr);
+
+drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 
 //FUNCTIONS///////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -112,8 +126,8 @@ function drawBlockLine(block_x, block_y, block_length, c) {
 // drawGrid - draws n_blocks * n_blocks grid
 // n_blocks : number of blocks per side of the grid
 function drawGrid(n_blocks, top_score_arr, side_score_arr) {
-  var c = canvas.getContext('2d');
-  var block_length = canvas.width / n_blocks;
+  var c = inner_canvas.getContext('2d');
+  var block_length = inner_canvas.width / n_blocks;
 
   for (xBlock = 0; xBlock < n_blocks; xBlock++) {
     for (yBlock = 0; yBlock < n_blocks; yBlock++) {
@@ -124,20 +138,32 @@ function drawGrid(n_blocks, top_score_arr, side_score_arr) {
   drawGridLines(n_blocks, block_length, c);
 }
 
-//
-function drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr){
-	top_score_arr = setScoreArr(top_score_arr, n_blocks);
+// draws numbers on the top and side canvas
+function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr) {
+  top_score_arr = setScoreArr(top_score_arr, n_blocks);
   side_score_arr = setScoreArr(side_score_arr, n_blocks);
-  var off_set = block_length/2;
-  
-	c.font = block_length + "px arial";
-	c.textBaseline = "middle";
-  c.textAlign = "center";
-  c.fillStyle = "black"
+  var off_set = block_length / 2;
 
-  for(i = 0; i < top_score_arr.length; i++){
-   	c.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
-  	c.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
+  // clear header canvas
+  topc.fillStyle = "white";
+  topc.fillRect(0, 0, block_length * n_blocks, block_length);
+  leftc.fillStyle = "white";
+  leftc.fillRect(0, 0, block_length, block_length * n_blocks);
+
+  // write numbers
+  topc.fillStyle = "black";
+  topc.font = block_length + "px arial";
+  topc.textBaseline = "middle";
+  topc.textAlign = "center";
+  leftc.fillStyle = topc.fillStyle;
+  leftc.font = topc.font;
+  leftc.textBaseline = topc.textBaseline;
+  leftc.textAlign = topc.textAlign;
+
+
+  for (i = 0; i < top_score_arr.length; i++) {
+    topc.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
+    leftc.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
   }
 }
 
@@ -156,20 +182,20 @@ function checkValidNumber(num) {
 
   txt.style.backgroundColor = "";
   return num;
-
 }
 
 // sets the top and side team range of randomly ordered values based on nblocks
 function setScoreArr(team, size) {
-	team = [];
+  team = [];
   for (var i = 0; i < size; i++) {
-  	team.push(i);
-}
+    team.push(i);
+  }
 
-return shuffle(team);
+  return shuffle(team);
 }
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
+// shuffles the order of an array
 function shuffle(array) {
   var currentIndex = array.length,
     temporaryValue, randomIndex;
@@ -196,7 +222,7 @@ function shuffle(array) {
 // clickGrid - clicks on appropiate block within the grid and changes the blocks color
 function clickGrid(event) {
 
-  canvas_origin = canvas.getBoundingClientRect();
+  canvas_origin = inner_canvas.getBoundingClientRect();
 
   if (random_selection == false) {
     mouse.x = event.x - canvas_origin.left;
@@ -255,6 +281,8 @@ function clickGrid(event) {
 // fillRandom - fills the remaining squares randomly
 // currently this function only locks the random selection
 random_button.onclick = function() {
+  shuffle(user_arr);
+
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
@@ -319,17 +347,13 @@ random_button.onclick = function() {
 
   }
   drawGridLines(n_blocks, block_length, c);
-  
-  
-  
-  
-  drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
-  
-  
+  drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 };
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
+  shuffle(user_arr);
+
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
@@ -350,10 +374,5 @@ refresh_button.onclick = function() {
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
-
-
-
-drawNum(c, block_length, n_blocks, top_score_arr, side_score_arr);
-
-
+  drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 };
