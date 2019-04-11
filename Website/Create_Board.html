@@ -1,29 +1,43 @@
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>SportzSquarez - Create Board</title>
-  <style type="text/css">
-    canvas {
-      border: 3px solid black;
-    }
-<!-- makes canvas fully fit window -->
-    body {
-      margin: 0; 
-    }
-  </style>
-</head>
-<body background="C:\Users\konde\Desktop\Website\images\background.jpg">
-  <h1>
-     <a href="C:\Users\konde\Desktop\Website\HomePage.html"><img src="C:\Users\konde\Desktop\Website\images\LOGO.png" style="float: left" width="320" height="100" hspace="20"/>
-      </a>
-  </h1>
 
-  
-  
-  <canvas></canvas>
+  <head>
+
+    <meta charset="UTF-8">
+
+    <title>SportzSquarez - Create Board</title>
+
+    <style type="text/css">
+      canvas {
+        border: 3px solid black;
+      }
+
+      < !-- makes canvas fully fit window -->body {
+        margin: 0;
+      }
+
+    </style>
+
+  </head>
+
+  <body background="C:\Users\konde\Desktop\Website\images\background.jpg">
+
+    <h1>
+
+
+    </h1>
+
+    <canvas id="top header canvas"></canvas>
+    <canvas id="clicking canvas"></canvas>
+    <canvas id="left header canvas"></canvas>
+
     <input id="Random" type="button" value="Random" onclick="doFunction();" />
+
     <input id="Refresh" type="button" value="Refresh" onclick="doFunction();" />
-    <input id="nPlayers" type="text" value="" />
+
+    <input id="nPlayers" type="text" value="2" />
+
     <script src="squareGen.js"></script>
+
   </body>
+
 </html>
