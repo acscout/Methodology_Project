@@ -9,8 +9,9 @@
   </h1>
 <br><br><br><br><br><br>
 
-  <ol>
-  <option value="Albany Great Danes">Albany Great Danes</option>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<select>
+    <option value="Albany Great Danes">Albany Great Danes</option>
     <option value="Binghamton Bearcats">Binghamton Bearcats</option>
     <option value="Hartford Hawks">Hartford Hawks</option>
     <option value="Maine Black Bears">Maine Black Bears</option>
@@ -153,7 +154,7 @@
     <option value="Northeastern Huskies">Northeastern Huskies</option>
     <option value="Towson Tigers">Towson Tigers</option>
     <option value="UNC Wilmington Seahawks">UNC Wilmington Seahawks</option>
-    <option value="William & Mary Tribe">William & Mary Tribe</option>
+    <option value="William & Mary Tribe">William and Mary Tribe</option>
 
     <option value="Charlotte 49ers">Charlotte 49ers</option>
     <option value="Florida Atlantic Owls">Florida Atlantic Owls</option>
@@ -224,7 +225,7 @@
     <option value="Howard Bison">Howard Bison</option>
     <option value="Maryland-Eastern Shore Hawks">Maryland-Eastern Shore Hawks</option>
     <option value="Norfolk State Spartans">Norfolk State Spartans</option>
-    <option value="North Carolina A&T Aggies">North Carolina A&T Aggies</option>
+    <option value="North Carolina A&T Aggies">North Carolina AnT Aggies</option>
     <option value="North Carolina Central Eagles">North Carolina Central Eagles</option>
     <option value="Savannah State Tigers">Savannah State Tigers</option>
     <option value="South Carolina State Bulldogs">South Carolina State Bulldogs</option>
@@ -338,7 +339,7 @@
     <option value="SE Louisiana Lions">SE Louisiana Lions</option>
     <option value="Sam Houston State Bearkats">Sam Houston State Bearkats</option>
     <option value="Stephen F. Austin Lumberjacks">Stephen F. Austin Lumberjacks</option>
-    <option value="Texas A&M-CC Islanders">Texas A&M-CC Islanders</option>
+    <option value="Texas A&M-CC Islanders">Texas A&M CC Islanders</option>
 
     <option value="Alabama A&M Bulldogs">Alabama A&M Bulldogs</option>
     <option value="Alabama State Hornets">Alabama State Hornets</option>
@@ -394,7 +395,44 @@
     <option value="UMKC Kangaroos">UMKC Kangaroos</option>
     <option value="UT Rio Grande Valley Vaqueros">UT Rio Grande Valley Vaqueros</option>
     <option value="Utah Valley Wolverines">Utah Valley Wolverines</option>
-	  
-  </ol>
+</select>
+<input type="text">
+<script>
+//jQuery extension method:
+jQuery.fn.filterByText = function(textbox) {
+  return this.each(function() {
+    var select = this;
+    var options = [];
+    $(select).find('option').each(function() {
+      options.push({
+        value: $(this).val(),
+        text: $(this).text()
+      });
+    });
+    $(select).data('options', options);
+
+    $(textbox).bind('change keyup', function() {
+      var options = $(select).empty().data('options');
+      var search = $.trim($(this).val());
+      var regex = new RegExp(search, "gi");
+
+      $.each(options, function(i) {
+        var option = options[i];
+        if (option.text.match(regex) !== null) {
+          $(select).append(
+            $('<option>').text(option.text).val(option.value)
+          );
+        }
+      });
+    });
+  });
+};
+
+// You could use it like this:
+
+$(function() {
+  $('select').filterByText($('input'));
+});
+</script>
 
 </body>
