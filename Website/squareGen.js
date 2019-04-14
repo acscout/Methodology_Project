@@ -12,7 +12,7 @@ last edit: 4/10/2019 - whipple
 ///////////////////////////////////////////////////////
 var inner_canvas = document.getElementById("clicking canvas");
 var top_header_canvas = document.getElementById("top header canvas");
-var left_header_canvas = document.getElementById("left header canvas"); 
+var left_header_canvas = document.getElementById("left header canvas");
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
 
@@ -62,9 +62,6 @@ left_header_canvas.height = window.innerWidth / 1.5;
 var c = inner_canvas.getContext('2d');
 var topc = top_header_canvas.getContext('2d');
 var leftc = left_header_canvas.getContext('2d');
-
-
-
 
 
 //RUNNING CODE/////////////////////////////////////////////////
@@ -143,33 +140,31 @@ function drawGrid(n_blocks, top_score_arr, side_score_arr) {
 }
 
 //
-function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr){
-	top_score_arr = setScoreArr(top_score_arr, n_blocks);
+function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr) {
+  top_score_arr = setScoreArr(top_score_arr, n_blocks);
   side_score_arr = setScoreArr(side_score_arr, n_blocks);
-  var off_set = block_length/2;
-  
+  var off_set = block_length / 2;
+
   // clear header canvas
-topc.fillStyle = "white";
-topc.fillRect(0, 0, block_length * n_blocks, block_length);
-leftc.fillStyle = "white";
-leftc.fillRect(0, 0, block_length, block_length * n_blocks); 
-  
+  topc.fillStyle = "white";
+  topc.fillRect(0, 0, block_length * n_blocks, block_length);
+  leftc.fillStyle = "white";
+  leftc.fillRect(0, 0, block_length, block_length * n_blocks);
+
   // write numbers
   topc.fillStyle = "black";
-	topc.font = block_length + "px arial";
+  topc.font = block_length + "px arial";
   topc.textBaseline = "middle";
-	topc.textAlign = "center";
+  topc.textAlign = "center";
   leftc.fillStyle = topc.fillStyle;
   leftc.font = topc.font;
   leftc.textBaseline = topc.textBaseline;
   leftc.textAlign = topc.textAlign;
- 
 
-  for(i = 0; i < top_score_arr.length; i++){
-   	topc.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
-  	leftc.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
-    drawBlockLine(0, i, block_length, leftc);
-    drawBlockLine(i, 0, block_length, topc);
+
+  for (i = 0; i < top_score_arr.length; i++) {
+    topc.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
+    leftc.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
   }
 }
 
@@ -193,12 +188,12 @@ function checkValidNumber(num) {
 
 // sets the top and side team range of randomly ordered values based on nblocks
 function setScoreArr(team, size) {
-	team = [];
+  team = [];
   for (var i = 0; i < size; i++) {
-  	team.push(i);
-}
+    team.push(i);
+  }
 
-return shuffle(team);
+  return shuffle(team);
 }
 
 // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -287,8 +282,8 @@ function clickGrid(event) {
 // fillRandom - fills the remaining squares randomly
 // currently this function only locks the random selection
 random_button.onclick = function() {
-	shuffle(user_arr);
-  
+  shuffle(user_arr);
+
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
@@ -358,7 +353,7 @@ random_button.onclick = function() {
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
-shuffle(user_arr);
+  shuffle(user_arr);
 
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
@@ -380,5 +375,5 @@ shuffle(user_arr);
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
-drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
+  drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 };
