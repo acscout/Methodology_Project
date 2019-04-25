@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 4/10/2019 - whipple
+last edit: 4/25/2019 - Daniel Whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -15,6 +15,7 @@ var top_header_canvas = document.getElementById("top header canvas");
 var left_header_canvas = document.getElementById("left header canvas");
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
+var find_winner_button = document.getElementById("find winner");
 
 var n_players = 2; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
@@ -45,8 +46,10 @@ var side_team_score; // user inputted score for the team on left of the block
 var top_score_arr = []; // 1 - nblock size array that randomly orders 1-nblock. used to randomize squares
 var side_score_arr = []; // same, for the side team
 var winning_block; // compare the side/top_score arr with the user inputted top/side_team_score to determine the winning block.
+var both_team_scores; // returned 2d array of both side and top team arrs
 
 var random_selection = false; // will randomly select any remaining blocks
+var board_filled = false;
 
 // we can change the canvas size as we like
 inner_canvas.width = window.innerWidth / 1.5;
@@ -78,7 +81,7 @@ inner_canvas.addEventListener('click', clickGrid, false);
 // reorder colors in the color arr
 shuffle(user_arr);
 
-drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
+both_team_scores = drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 
 //FUNCTIONS///////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////
@@ -145,6 +148,14 @@ function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_
   side_score_arr = setScoreArr(side_score_arr, n_blocks);
   var off_set = block_length / 2;
 
+  var scoreArrReturn = [];
+  make2dArray(2, 10, scoreArrReturn);
+  for (var i = 0; i < 10; i++) {
+    scoreArrReturn[0][i] = top_score_arr[i];
+    scoreArrReturn[1][i] = side_score_arr[i];
+  }
+  console.log(scoreArrReturn);
+
   // clear header canvas
   topc.fillStyle = "white";
   topc.fillRect(0, 0, block_length * n_blocks, block_length);
@@ -166,6 +177,8 @@ function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_
     topc.fillText(top_score_arr[i].toString(), i * block_length + off_set, off_set);
     leftc.fillText(side_score_arr[i].toString(), off_set, i * block_length + off_set);
   }
+
+  return scoreArrReturn;
 }
 
 // checks if the value is a number and greater than 2 (need at least two players) and less than max 100 players
@@ -242,6 +255,11 @@ function clickGrid(event) {
 
       // check if all the moves have been selected
       if (iuser < n_players) {
+      	// check if last block selected
+        if(turns_per_player == iturn && iuser == n_players-1){
+        	board_filled = true;
+        }
+      
         // more players than hardcoded colors
         if (iuser >= user_arr.length) {
           user_arr.push(generateHexColor());
@@ -254,6 +272,7 @@ function clickGrid(event) {
 
       } else {
         // else the extra blocks are unused and colored in
+        board_filled = true;
         for (var i = 0; i < n_blocks; i++) {
           for (var j = 0; j < n_blocks; j++) {
             if (grid_arr[i][j] == "not selected") {
@@ -348,13 +367,14 @@ random_button.onclick = function() {
 
   }
   drawGridLines(n_blocks, block_length, c);
-  drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
+  both_team_scores = drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
+  board_filled = true;
 };
 
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
   shuffle(user_arr);
-
+	board_filled = false;
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
@@ -375,5 +395,24 @@ refresh_button.onclick = function() {
       grid_arr[xBlock][yBlock] = "not selected";
     }
   }
-  drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
+  both_team_scores = drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_arr);
 };
+
+// find winning block
+find_winner_button.onclick = function() {
+	if(board_filled == true){
+  top_team_score = ~~document.getElementById("top team").value, "top team";
+  side_team_score = ~~document.getElementById("side team").value, "side team";
+
+  var side_location = both_team_scores[1].indexOf(side_team_score);
+  var top_location = both_team_scores[0].indexOf(top_team_score);
+
+  c.fillStyle = "gold";
+  c.beginPath();
+//  c.lineWidth = "20";
+  //c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
+  c.fillRect(top_location * block_length, side_location * block_length, block_length, block_length);
+ // c.lineWidth = "1";
+  c.stroke();
+  }
+}
