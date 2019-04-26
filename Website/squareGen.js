@@ -16,6 +16,8 @@ var left_header_canvas = document.getElementById("left header canvas");
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
 var find_winner_button = document.getElementById("find winner");
+var top_team_id = document.getElementById("top team");
+var side_team_id = document.getElementById("side team");
 
 var n_players = 2; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
@@ -155,7 +157,7 @@ function drawNum(topc, leftc, block_length, n_blocks, top_score_arr, side_score_
     scoreArrReturn[0][i] = top_score_arr[i];
     scoreArrReturn[1][i] = side_score_arr[i];
   }
-  console.log(scoreArrReturn);
+
 
   // clear header canvas
   topc.fillStyle = "white";
@@ -197,7 +199,21 @@ function checkValidNumber(num) {
 
   txt.style.backgroundColor = "";
   return num;
+}
 
+// check the score values are valid
+// have not been able to get blocks to turn red
+function checkScoreValues(num, team_id) {
+  var max = 9;
+  var min = 0;
+ // team_id = document.getElementById(team_id);
+
+  if (isNaN(num) || num < min || num > max) {
+    team_id.style.backgroundColor = "red";
+    return null;
+  }
+	team_id.style.backgroundColor = "";
+  return num;
 }
 
 // sets the top and side team range of randomly ordered values based on nblocks
@@ -256,11 +272,11 @@ function clickGrid(event) {
 
       // check if all the moves have been selected
       if (iuser < n_players) {
-      	// check if last block selected
-        if(turns_per_player == iturn && iuser == n_players-1){
-        	board_filled = true;
+        // check if last block selected
+        if (turns_per_player == iturn && iuser == n_players - 1) {
+          board_filled = true;
         }
-      
+
         // more players than hardcoded colors
         if (iuser >= user_arr.length) {
           user_arr.push(generateHexColor());
@@ -375,7 +391,7 @@ random_button.onclick = function() {
 // resets the grid to original grid of unclicked blocks when 'refresh' button clicked
 refresh_button.onclick = function() {
   shuffle(user_arr);
-	board_filled = false;
+  board_filled = false;
   // This updates the number of players based on texbox value
   n_players = checkValidNumber(~~document.getElementById("nPlayers").value);
   turns_per_player = Math.floor(total_blocks / n_players);
@@ -401,29 +417,34 @@ refresh_button.onclick = function() {
 
 // find winning block
 find_winner_button.onclick = function() {
-	if (board_filled == true){
-  // redraw block under old winning location
-  if(winning_block_xy[0] != null){
-  	c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]] ];
-    c.fillRect(winning_block_xy[0] * block_length, winning_block_xy[1] * block_length, block_length, block_length);
-    drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
-  }
+  if (board_filled == true) {
   
-  top_team_score = ~~document.getElementById("top team").value, "top team";
-  side_team_score = ~~document.getElementById("side team").value, "side team";
+		      // redraw block under old winning location
+      if (winning_block_xy[0] != null) {
+        c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]]];
+        c.fillRect(winning_block_xy[0] * block_length, winning_block_xy[1] * block_length, block_length, block_length);
+        drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
+      }
 
-  var side_location = both_team_scores[1].indexOf(side_team_score);
-  var top_location = both_team_scores[0].indexOf(top_team_score);
-  
-  winning_block_xy = [top_location, side_location];
-  c.strokeStyle = "gold"
-  c.beginPath();
-  c.lineWidth = "4";
-  c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
-  c.stroke();
-  c.lineWidth = "1";
-  c.strokeStyle = "black"
- //   c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
-//  c.stroke();
+    //top_team_score = ~~document.getElementById("top team").value, "top team";
+    //side_team_score = ~~document.getElementById("side team").value, "side team";
+    top_team_score = checkScoreValues(~~document.getElementById("top team").value, top_team_id);
+    side_team_score = checkScoreValues(~~document.getElementById("side team").value, side_team_id);
+    // if either text input is invalid, dont try to draw winner
+    if (top_team_score != null && side_team_score != null) {
+      
+      var side_location = both_team_scores[1].indexOf(side_team_score);
+      var top_location = both_team_scores[0].indexOf(top_team_score);
+
+      winning_block_xy = [top_location, side_location];
+
+      c.fillStyle = "gold";
+      c.fillRect(top_location * block_length, side_location * block_length, block_length, block_length);
+      c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]]];
+      c.fillRect(winning_block_xy[0] * block_length + (block_length * 0.1), winning_block_xy[1] * block_length + (block_length * 0.1), block_length * 0.8, block_length * 0.8);
+      drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
+    }
   }
+  checkScoreValues(null, top_team_id);
+  checkScoreValues(null, side_team_id);
 }
