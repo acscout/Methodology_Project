@@ -47,6 +47,7 @@ var top_score_arr = []; // 1 - nblock size array that randomly orders 1-nblock. 
 var side_score_arr = []; // same, for the side team
 var winning_block; // compare the side/top_score arr with the user inputted top/side_team_score to determine the winning block.
 var both_team_scores; // returned 2d array of both side and top team arrs
+var winning_block_xy = [null, null]; //xy location of the winning block
 
 var random_selection = false; // will randomly select any remaining blocks
 var board_filled = false;
@@ -400,19 +401,29 @@ refresh_button.onclick = function() {
 
 // find winning block
 find_winner_button.onclick = function() {
-	if(board_filled == true){
+	if (board_filled == true){
+  // redraw block under old winning location
+  if(winning_block_xy[0] != null){
+  	c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]] ];
+    c.fillRect(winning_block_xy[0] * block_length, winning_block_xy[1] * block_length, block_length, block_length);
+    drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
+  }
+  
   top_team_score = ~~document.getElementById("top team").value, "top team";
   side_team_score = ~~document.getElementById("side team").value, "side team";
 
   var side_location = both_team_scores[1].indexOf(side_team_score);
   var top_location = both_team_scores[0].indexOf(top_team_score);
-
-  c.fillStyle = "gold";
+  
+  winning_block_xy = [top_location, side_location];
+  c.strokeStyle = "gold"
   c.beginPath();
-//  c.lineWidth = "20";
-  //c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
-  c.fillRect(top_location * block_length, side_location * block_length, block_length, block_length);
- // c.lineWidth = "1";
+  c.lineWidth = "4";
+  c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
   c.stroke();
+  c.lineWidth = "1";
+  c.strokeStyle = "black"
+ //   c.rect(top_location * block_length, side_location * block_length, block_length, block_length);
+//  c.stroke();
   }
 }
