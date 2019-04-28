@@ -5,7 +5,7 @@ The grid generator will create a n*n square grid 1/2 the size of the screen. Pla
 Expected inputs: n_players	: numer of players is expected to vary
 								 n_blocks		: size of the grid is expected to vary
 
-last edit: 4/25/2019 - Daniel Whipple
+last edit: 4/27/2019 - Daniel Whipple
 */
 
 //INITIALIZE///////////////////////////////////////////
@@ -16,8 +16,6 @@ var left_header_canvas = document.getElementById("left header canvas");
 var random_button = document.getElementById("Random");
 var refresh_button = document.getElementById("Refresh");
 var find_winner_button = document.getElementById("find winner");
-var top_team_id = document.getElementById("top team");
-var side_team_id = document.getElementById("side team");
 
 var n_players = 2; // indicates the number of players
 var n_blocks = 10; // number of blocks per side (n*n grid)
@@ -201,20 +199,6 @@ function checkValidNumber(num) {
   return num;
 }
 
-// check the score values are valid
-// have not been able to get blocks to turn red
-function checkScoreValues(num, team_id) {
-  var max = 9;
-  var min = 0;
- // team_id = document.getElementById(team_id);
-
-  if (isNaN(num) || num < min || num > max) {
-    team_id.style.backgroundColor = "red";
-    return null;
-  }
-	team_id.style.backgroundColor = "";
-  return num;
-}
 
 // sets the top and side team range of randomly ordered values based on nblocks
 function setScoreArr(team, size) {
@@ -418,33 +402,28 @@ refresh_button.onclick = function() {
 // find winning block
 find_winner_button.onclick = function() {
   if (board_filled == true) {
-  
-		      // redraw block under old winning location
-      if (winning_block_xy[0] != null) {
-        c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]]];
-        c.fillRect(winning_block_xy[0] * block_length, winning_block_xy[1] * block_length, block_length, block_length);
-        drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
-      }
 
-    //top_team_score = ~~document.getElementById("top team").value, "top team";
-    //side_team_score = ~~document.getElementById("side team").value, "side team";
-    top_team_score = checkScoreValues(~~document.getElementById("top team").value, top_team_id);
-    side_team_score = checkScoreValues(~~document.getElementById("side team").value, side_team_id);
-    // if either text input is invalid, dont try to draw winner
-    if (top_team_score != null && side_team_score != null) {
-      
+    // redraw block under old winning location
+    if (winning_block_xy[0] != null) {
+      c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]]];
+      c.fillRect(winning_block_xy[0] * block_length, winning_block_xy[1] * block_length, block_length, block_length);
+      drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
+    }
+    
+	// get scores from number inputs 
+   side_team_score = ~~document.getElementById("Side team score").value;
+   top_team_score = ~~document.getElementById("Top team score").value;
+   
       var side_location = both_team_scores[1].indexOf(side_team_score);
       var top_location = both_team_scores[0].indexOf(top_team_score);
 
       winning_block_xy = [top_location, side_location];
 
+			// highlight the winning block (gold block filled in with original block color)
       c.fillStyle = "gold";
       c.fillRect(top_location * block_length, side_location * block_length, block_length, block_length);
       c.fillStyle = user_arr[grid_arr[winning_block_xy[0]][winning_block_xy[1]]];
       c.fillRect(winning_block_xy[0] * block_length + (block_length * 0.1), winning_block_xy[1] * block_length + (block_length * 0.1), block_length * 0.8, block_length * 0.8);
       drawBlockLine(winning_block_xy[0], winning_block_xy[1], block_length, c);
-    }
   }
-  checkScoreValues(null, top_team_id);
-  checkScoreValues(null, side_team_id);
 }
